@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calcul d'heures</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+:root{--bg:#EEF1F4;--card:#fff;--ink:#15202B;--mute:#5B6877;--line:#D5DBE2;--acc:#1D4ED8;--accink:#fff;--ot:#B45309;--otbg:#FEF3E2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--otbg:#33261A}}
+:root[data-theme="dark"]{--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--otbg:#33261A}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.4 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px 14px 40px}
+h1{font:700 26px/1.1 "Barlow Condensed",Barlow,system-ui,sans-serif;margin:4px 0 14px}
+.sum{background:var(--acc);color:var(--accink);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.sum .lab{font-size:14px;opacity:.85}
+.sum .big{font:700 48px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;margin:2px 0 2px}
+.sum .dec{font-size:15px;opacity:.9;font-variant-numeric:tabular-nums}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.split div{background:rgba(255,255,255,.14);border-radius:10px;padding:9px 11px}
+.split b{display:block;font:700 22px/1.1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums}
+.split small{font-size:13px;opacity:.9}
+.pay{margin-top:10px;font-size:15px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.top strong{font-weight:700}
+.tot{font:600 18px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--mute)}
+.tot.on{color:var(--ink)}
+.f{display:grid;grid-template-columns:1fr 1fr 78px;gap:8px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:2px}
+input{width:100%;min-height:44px;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-variant-numeric:tabular-nums}
+input:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+.note{font-size:13px;color:var(--ot);margin-top:5px;display:none}
+.set{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:14px 0}
+.set h2{font:700 18px/1 "Barlow Condensed",Barlow,sans-serif;margin:0 0 10px}
+.s3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
+.btns{display:flex;gap:8px}
+button{flex:1;min-height:46px;font:600 16px Barlow,system-ui,sans-serif;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+.msg{min-height:20px;font-size:14px;color:var(--mute);margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>Calcul d'heures</h1>
+<section class="sum" aria-live="polite">
+ <div class="lab">Total de la semaine</div>
+ <div class="big" id="tw">0h00</div>
+ <div class="dec" id="twd">0,00 h</div>
+ <div class="split">
+  <div><small>Heures régulières</small><b id="reg">0h00</b></div>
+  <div><small id="otl">Heures supplémentaires</small><b id="ot">0h00</b></div>
+ </div>
+ <div class="pay" id="pay" hidden></div>
+</section>
+<div id="days"></div>
+<section class="set">
+ <h2>Réglages</h2>
+ <div class="s3">
+  <div><label for="seuil">Seuil (h/sem.)</label><input id="seuil" type="number" inputmode="decimal" min="0" step="0.5"></div>
+  <div><label for="maj">Majoration</label><input id="maj" type="number" inputmode="decimal" min="1" step="0.05"></div>
+  <div><label for="taux">Taux ($/h)</label><input id="taux" type="number" inputmode="decimal" min="0" step="0.01" placeholder="facultatif"></div>
+ </div>
+ <p class="hint">Par défaut : 40 h par semaine, majoration de 50 % (×1,5), selon la Loi sur les normes du travail. Les règles de la construction (CCQ) ou d'une convention collective peuvent différer : ajuste le seuil au besoin.</p>
+</section>
+<div class="btns">
+ <button class="p" id="copy">Copier le tableau</button>
+ <button id="reset">Tout effacer</button>
+</div>
+<div class="msg" id="msg" role="status"></div>
+</main>
+<script>
+(function(){
+var D=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var KEY='calcul-heures-v1';
+var st={rows:D.map(function(){return{s:'',e:'',p:30}}),seuil:40,maj:1.5,taux:''};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.rows&&o.rows.length===7)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function $(id){return document.getElementById(id)}
+function tm(v){if(!v)return null;var a=v.split(':');return (+a[0])*60+(+a[1])}
+function minutes(r){
+ var s=tm(r.s),e=tm(r.e);if(s===null||e===null)return null;
+ var m=e-s;if(m<=0)m+=1440;
+ var p=Math.max(0,+r.p||0),over=p>m;
+ return{m:Math.max(0,m-p),over:over};
+}
+function hm(m){m=Math.round(m);return Math.floor(m/60)+'h'+String(m%60).padStart(2,'0')}
+function dc(m){return (m/60).toFixed(2).replace('.',',')+' h'}
+function money(x){return x.toLocaleString('fr-CA',{style:'currency',currency:'CAD'})}
+var box=$('days');
+box.innerHTML=D.map(function(d,i){return '<div class="day"><div class="top"><strong>'+d+'</strong><span class="tot" id="t'+i+'">–</span></div>'+
+ '<div class="f"><div><label for="s'+i+'">Début</label><input id="s'+i+'" type="time" data-i="'+i+'" data-k="s"></div>'+
+ '<div><label for="e'+i+'">Fin</label><input id="e'+i+'" type="time" data-i="'+i+'" data-k="e"></div>'+
+ '<div><label for="p'+i+'">Pause (min)</label><input id="p'+i+'" type="number" inputmode="numeric" min="0" step="5" data-i="'+i+'" data-k="p"></div></div>'+
+ '<div class="note" id="n'+i+'">La pause dépasse la durée de travail.</div></div>'}).join('');
+function fill(){
+ st.rows.forEach(function(r,i){$('s'+i).value=r.s;$('e'+i).value=r.e;$('p'+i).value=r.p});
+ $('seuil').value=st.seuil;$('maj').value=st.maj;$('taux').value=st.taux;
+}
+function calc(){
+ var tot=0;
+ st.rows.forEach(function(r,i){
+  var x=minutes(r),t=$('t'+i);
+  if(x===null){t.textContent='–';t.className='tot';$('n'+i).style.display='none';return}
+  tot+=x.m;t.textContent=hm(x.m)+' · '+dc(x.m);t.className='tot on';
+  $('n'+i).style.display=x.over?'block':'none';
+ });
+ var seuil=Math.max(0,+st.seuil||0)*60,maj=Math.max(1,+st.maj||1);
+ var reg=Math.min(tot,seuil),ot=Math.max(0,tot-seuil);
+ $('tw').textContent=hm(tot);$('twd').textContent=dc(tot);
+ $('reg').textContent=hm(reg);$('ot').textContent=hm(ot);
+ $('otl').textContent='Supplémentaires (×'+String(maj).replace('.',',')+')';
+ var tx=parseFloat(st.taux),pay=$('pay');
+ if(tx>0){pay.hidden=false;pay.textContent='Salaire brut estimé : '+money(reg/60*tx+ot/60*tx*maj)}else pay.hidden=true;
+}
+document.addEventListener('input',function(ev){
+ var t=ev.target;
+ if(t.dataset&&t.dataset.i!==undefined){var v=t.value;st.rows[+t.dataset.i][t.dataset.k]=t.dataset.k==='p'?(v===''?0:+v):v}
+ else if(t.id==='seuil'||t.id==='maj'||t.id==='taux'){st[t.id]=t.value}
+ else return;
+ save();calc();
+});
+$('copy').onclick=function(){
+ var L=['Jour\tDébut\tFin\tPause (min)\tTotal\tDécimal'];
+ st.rows.forEach(function(r,i){var x=minutes(r);if(x)L.push([D[i],r.s,r.e,r.p,hm(x.m),dc(x.m).replace(' h','')].join('\t'))});
+ L.push('Total\t\t\t\t'+$('tw').textContent+'\t'+$('twd').textContent.replace(' h',''));
+ L.push('Supplémentaires\t\t\t\t'+$('ot').textContent);
+ var txt=L.join('\n'),m=$('msg');
+ function ok(){m.textContent='Tableau copié. Colle-le dans un tableur ou un message.'}
+ function ko(){m.textContent='Copie impossible ici. Fais une capture d\'écran du résumé.'}
+ try{navigator.clipboard.writeText(txt).then(ok,ko)}catch(e){ko()}
+};
+var armed=false,rb=$('reset');
+rb.onclick=function(){
+ if(!armed){armed=true;rb.textContent='Confirmer l\'effacement';setTimeout(function(){armed=false;rb.textContent='Tout effacer'},4000);return}
+ st.rows=D.map(function(){return{s:'',e:'',p:30}});armed=false;rb.textContent='Tout effacer';
+ save();fill();calc();$('msg').textContent='Semaine effacée.';
+};
+fill();calc();
+})();
+</script>
+</body>
+</html>
