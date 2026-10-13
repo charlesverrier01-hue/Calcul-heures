@@ -6,50 +6,83 @@
 <title>Outils de chantier</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
 <style>
-:root{--bg:#EEF1F4;--card:#fff;--ink:#15202B;--mute:#5B6877;--line:#D5DBE2;--acc:#1D4ED8;--accink:#fff;--ot:#B45309;--key:#E4E9EF;--op:#D6E2FF;
+:root{--bg:#F3F4F6;--card:#fff;--field:#F2F4F7;--ink:#101828;--mute:#5E6A7D;--line:#E3E7EE;--acc:#12305F;--accink:#fff;--hi:#FFB000;--ot:#B45309;--key:#EAEEF4;--op:#DCE6FA;--hero1:#0F2547;--hero2:#21498A;--sh:0 1px 2px rgba(16,24,40,.06),0 6px 18px rgba(16,24,40,.05);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--key:#27323F;--op:#2A3B5C}}
-:root[data-theme="dark"]{--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--key:#27323F;--op:#2A3B5C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1017;--card:#141B25;--field:#0E141C;--ink:#EDF1F7;--mute:#9AA7B8;--line:#243041;--acc:#7BA3FF;--accink:#0B1220;--hi:#FFC233;--ot:#F5A94A;--key:#212C3B;--op:#22365C;--hero1:#0D1D3A;--hero2:#1A3A70;--sh:none}}
+:root[data-theme="dark"]{--bg:#0B1017;--card:#141B25;--field:#0E141C;--ink:#EDF1F7;--mute:#9AA7B8;--line:#243041;--acc:#7BA3FF;--accink:#0B1220;--hi:#FFC233;--ot:#F5A94A;--key:#212C3B;--op:#22365C;--hero1:#0D1D3A;--hero2:#1A3A70;--sh:none}
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.4 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:84px}
+[hidden]{display:none!important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:28px;-webkit-font-smoothing:antialiased}
 main{max-width:1000px;margin:0 auto}
-.tab{padding:16px 14px 24px}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tab:not([hidden]){animation:in .25s ease}
+@media (prefers-reduced-motion:reduce){.tab:not([hidden]){animation:none}*{transition:none!important}}
+/* en-tête et onglets */
+header.app{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.bar{max-width:1000px;margin:0 auto;padding:8px 14px 4px;display:flex;align-items:center}
+.brand{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:0;min-height:44px;color:var(--ink);font:700 20px/1 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.4px;text-transform:uppercase;cursor:pointer}
+.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--hi);color:#101828}
+.pills{position:relative;display:flex;gap:8px;overflow-x:auto;padding:4px 14px 10px;max-width:1000px;margin:0 auto;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pills button{flex:0 0 auto;display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;font-size:15px;background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.pills button.on{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.tab{padding:14px 14px 24px}
 .narrow{max-width:560px;margin:0 auto}
-h1{font:700 26px/1.1 "Barlow Condensed",Barlow,system-ui,sans-serif;margin:4px 0 14px}
-.tab label{display:block;font-size:13px;color:var(--mute);margin:8px 0 2px}
-input,select,textarea{width:100%;min-height:44px;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-variant-numeric:tabular-nums}
-textarea{min-height:64px;resize:vertical}
-input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
-button{min-height:46px;font:600 16px Barlow,system-ui,sans-serif;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;padding:0 14px}
+h1{font:700 30px/1 "Barlow Condensed",Barlow,system-ui,sans-serif;letter-spacing:.2px;margin:4px 0 14px}
+.tab label{display:block;font-size:13px;font-weight:600;color:var(--mute);margin:10px 0 3px}
+input,select,textarea{width:100%;min-height:46px;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-variant-numeric:tabular-nums;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:68px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button{min-height:48px;font:600 16px Barlow,system-ui,sans-serif;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;padding:0 16px;transition:transform .1s,filter .15s}
+button:active{transform:scale(.98)}
 button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
 .w{width:100%}
-.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
-.card h2,summary{font:700 19px/1.1 "Barlow Condensed",Barlow,sans-serif;margin:0 0 8px}
+.hint{font-size:13px;color:var(--mute);margin:10px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.card h2,summary{font:700 20px/1.1 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.2px;margin:0 0 8px}
 summary{cursor:pointer;margin:0}
 details[open] summary{margin-bottom:8px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .msg{min-height:20px;font-size:14px;color:var(--mute);margin-top:8px}
-/* navigation */
-.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
-.tabs button{flex:1;border:0;border-radius:0;background:transparent;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 6px;font-size:12px;min-height:56px}
-.tabs button.on{color:var(--acc);box-shadow:inset 0 3px 0 var(--acc)}
+/* accueil */
+.hero{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:24px;padding:22px 20px;box-shadow:var(--sh)}
+.hero h1{font:700 36px/1 "Barlow Condensed",Barlow,sans-serif;margin:0}
+.hero .hd2{opacity:.8;font-size:14px;margin-top:6px}
+.hero .hco{font-weight:600;margin-top:2px}
+.hero .hco:empty{display:none}
+.hero .hlab{margin-top:20px;font-size:14px;opacity:.85}
+.hero .hbig{font:700 60px/1 "Barlow Condensed",Barlow,sans-serif;color:var(--hi);font-variant-numeric:tabular-nums}
+.hero .hsub{opacity:.85;font-variant-numeric:tabular-nums}
+.hero .hrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.hero .hrow div{background:rgba(255,255,255,.12);border-radius:14px;padding:10px 12px}
+.hero .hrow small{display:block;font-size:12px;opacity:.85}
+.hero .hrow b{font:700 21px/1.15 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;min-height:152px;box-shadow:var(--sh)}
+.tile .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--field);background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.tile b{font:700 22px/1.05 "Barlow Condensed",Barlow,sans-serif;letter-spacing:.2px;margin-top:4px}
+.tile small{color:var(--mute);font-size:13px;font-weight:400;line-height:1.3}
+.tile .stat{margin-top:auto;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.tile:last-child:nth-child(odd){grid-column:span 2;min-height:120px}
+@media(min-width:640px){.tiles{grid-template-columns:repeat(3,1fr)}.tile:last-child:nth-child(odd){grid-column:auto;min-height:152px}}
+.foot{text-align:center;margin-top:18px}
 /* heures */
-.sum{background:var(--acc);color:var(--accink);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.sum{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:22px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--sh)}
 .sum .lab{font-size:14px;opacity:.85}
-.sum .big{font:700 48px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;margin:2px 0}
+.sum .big{font:700 52px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;margin:2px 0;color:var(--hi)}
 .sum .dec{font-size:15px;opacity:.9;font-variant-numeric:tabular-nums}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.split div{background:rgba(255,255,255,.14);border-radius:10px;padding:9px 11px}
+.split div{background:rgba(255,255,255,.12);border-radius:14px;padding:10px 12px}
 .split b{display:block;font:700 22px/1.1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums}
 .split small{font-size:13px;opacity:.9}
 .pay{margin-top:10px;font-size:15px}
-.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh)}
 .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .dt{font:600 18px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--mute)}
 .dt.on{color:var(--ink)}
-.f{display:grid;grid-template-columns:1fr 1fr 78px;gap:8px}
+.f{display:grid;grid-template-columns:1fr 1fr 80px;gap:8px}
 .f label,.s3 label{margin-top:0}
 .note{font-size:13px;color:var(--ot);margin-top:5px;display:none}
 .s3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -57,15 +90,15 @@ details[open] summary{margin-bottom:8px}
 .btns button{flex:1}
 /* factures */
 .wrap{display:grid;gap:16px;max-width:1000px;margin:0 auto}
-@media(min-width:900px){.wrap{grid-template-columns:420px 1fr;align-items:start}.ui{position:sticky;top:12px}}
-.ln{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px}
+@media(min-width:900px){.wrap{grid-template-columns:420px 1fr;align-items:start}.ui{position:sticky;top:130px}}
+.ln{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;background:var(--card)}
 .ln .r{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:6px;margin-top:6px}
-.ln .b{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-weight:600;font-variant-numeric:tabular-nums}
+.ln .b{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-weight:600;font-variant-numeric:tabular-nums}
 .chk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:15px;color:var(--ink)}
-.tab .chk{color:var(--ink);font-size:15px}
+.tab .chk{color:var(--ink);font-size:15px;font-weight:400}
 .chk input{width:22px;min-height:22px}
 .pv{overflow-x:auto}
-.sheet{background:#fff;color:#111;width:100%;min-width:640px;max-width:816px;margin:0 auto;padding:36px 40px;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,.18);font:14px/1.45 Helvetica,Arial,sans-serif}
+.sheet{background:#fff;color:#111;width:100%;min-width:640px;max-width:816px;margin:0 auto;padding:36px 40px;border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.18);font:14px/1.45 Helvetica,Arial,sans-serif}
 .sheet .hd{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid #1D4ED8;padding-bottom:14px}
 .sheet .co b{font-size:22px;display:block;margin-bottom:2px}
 .sheet .ti{text-align:right}
@@ -83,30 +116,30 @@ details[open] summary{margin-bottom:8px}
 .sheet .nt{margin-top:22px;white-space:pre-wrap}
 .sheet .ft{margin-top:24px;padding-top:8px;border-top:1px solid #ccc;font-size:12px;color:#444}
 /* prix */
-.grp h3{font:700 15px/1 "Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;letter-spacing:.5px;color:var(--mute);margin:14px 0 2px}
-.st{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.grp h3{font:700 15px/1 "Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:var(--mute);margin:16px 0 2px}
+.st{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .st a{color:var(--acc);font-weight:600;text-decoration:none}
 .st a:last-child:not(:first-child){font-weight:400;font-size:14px;text-align:right}
 .best{font-weight:700;color:var(--acc);margin-top:8px;min-height:20px}
 /* estimation */
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{min-height:36px;font-size:14px;padding:0 10px}
+.chips button{min-height:38px;font-size:14px;padding:0 12px;border-radius:999px}
 .bk div{display:flex;justify-content:space-between;gap:12px;padding:4px 0;font-variant-numeric:tabular-nums}
 .bk .t{border-top:2px solid var(--ink);font-weight:700;font-size:18px;margin-top:6px;padding-top:8px}
 /* fractions */
-.disp{font:600 26px/1.2 "Barlow Condensed",Barlow,sans-serif;min-height:52px;text-align:right}
+.disp{font:600 26px/1.2 "Barlow Condensed",Barlow,sans-serif;min-height:56px;text-align:right}
 .res{text-align:right}
-.res .big{font:700 40px/1.1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--acc);word-break:break-word}
+.res .big{font:700 42px/1.1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--acc);word-break:break-word}
 .res .mu{font-size:14px;color:var(--mute);font-variant-numeric:tabular-nums;margin-top:4px}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.pad button{min-height:56px;font-size:22px;background:var(--key);padding:0}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.pad button{min-height:60px;font-size:24px;background:var(--key);border-color:transparent;border-radius:16px;padding:0}
 .pad button.o{background:var(--op);color:var(--acc)}
 .pad button.eq{background:var(--acc);color:var(--accink)}
 .pad .s2{grid-column:span 2}
 @media print{
  @page{size:letter;margin:12mm}
  body{background:#fff;padding:0}
- .tabs,.ui{display:none!important}
+ header.app,.ui{display:none!important}
  .tab{padding:0}
  .wrap{display:block}
  .pv{overflow:visible}
@@ -115,9 +148,25 @@ details[open] summary{margin-bottom:8px}
 </style>
 </head>
 <body>
+<header class="app"><div class="bar"><button class="brand" id="home-b" type="button" aria-label="Retour à l'accueil"><span class="logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></span>Outils de chantier</button></div>
+<nav class="pills" id="pills" role="tablist" aria-label="Outils" hidden><button type="button" role="tab" id="b-heures"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Heures</button><button type="button" role="tab" id="b-est"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M8 16h2M12 16h2"/></svg>Estimation</button><button type="button" role="tab" id="b-prix"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>Prix</button><button type="button" role="tab" id="b-factures"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Factures</button><button type="button" role="tab" id="b-frac"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg>Fractions</button></nav></header>
 <main>
 
-<section id="t-heures" class="tab narrow">
+<section id="t-home" class="tab narrow">
+<section class="hero" aria-live="polite">
+ <h1 id="hm-greet">Bonjour</h1>
+ <div class="hd2" id="hm-date"></div>
+ <div class="hco" id="hm-co"></div>
+ <div class="hlab">Heures cette semaine</div>
+ <div class="hbig" id="hm-hrs">0h00</div>
+ <div class="hsub" id="hm-hrsd">0,00 h</div>
+ <div class="hrow"><div><small>Solde de la facture en cours</small><b id="hm-fac">0,00 $</b></div><div><small>Dernière estimation</small><b id="hm-est">0,00 $</b></div></div>
+</section>
+<div class="tiles"><button type="button" class="tile" data-go="heures" style="--c:#3B82F6"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><b>Calcul d'heures</b><small>Quarts, pauses et heures supplémentaires</small><span class="stat" id="s-heures"></span></button><button type="button" class="tile" data-go="est" style="--c:#F59E0B"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M8 16h2M12 16h2"/></svg></span><b>Estimation</b><small>Matériel, main-d'œuvre et marges</small><span class="stat" id="s-est"></span></button><button type="button" class="tile" data-go="prix" style="--c:#10B981"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg></span><b>Prix</b><small>Comparer les magasins, prix à l'unité</small></button><button type="button" class="tile" data-go="factures" style="--c:#8B5CF6"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg></span><b>Factures</b><small>Factures PDF avec taxes du Québec</small><span class="stat" id="s-factures"></span></button><button type="button" class="tile" data-go="frac" style="--c:#EC4899"><span class="ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg></span><b>Fractions</b><small>Pieds et pouces, en métrique aussi</small></button></div>
+<p class="hint foot">Tes données restent dans ton navigateur.</p>
+</section>
+
+<section id="t-heures" class="tab narrow" hidden>
 <h1>Calcul d'heures</h1>
 <section class="sum" aria-live="polite">
  <div class="lab">Total de la semaine</div>
@@ -285,15 +334,9 @@ details[open] summary{margin-bottom:8px}
 
 </main>
 
-<nav class="tabs" role="tablist" aria-label="Sections">
- <button type="button" role="tab" id="b-heures"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Heures</button>
- <button type="button" role="tab" id="b-est"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/></svg>Estimation</button>
- <button type="button" role="tab" id="b-prix"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>Prix</button>
- <button type="button" role="tab" id="b-factures"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Factures</button>
- <button type="button" role="tab" id="b-frac"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg>Fractions</button>
-</nav>
 
 <script>
+window.STAT={};
 function $(id){return document.getElementById(id)}
 function r2(x){return Math.round((x+Number.EPSILON)*100)/100}
 
@@ -332,7 +375,7 @@ function calc(){
   tot+=x.m;t.textContent=hm(x.m)+' · '+dc(x.m);t.className='dt on';
   $('n'+i).style.display=x.over?'block':'none';
  });
- lastTot=tot;
+ lastTot=tot;STAT.hrs=tot;
  var seuil=Math.max(0,+st.seuil||0)*60,maj=Math.max(1,+st.maj||1);
  var reg=Math.min(tot,seuil),ot=Math.max(0,tot-seuil);
  $('tw').textContent=hm(tot);$('twd').textContent=dc(tot);
@@ -405,7 +448,7 @@ function totals(){
 }
 function fd(s){if(!s)return'';var d=new Date(s+'T00:00:00');return isNaN(d)?esc(s):d.toLocaleDateString('fr-CA',{year:'numeric',month:'long',day:'numeric'})}
 function prev(){
- var c=st.co,k=st.cl,t=totals();
+ var c=st.co,k=st.cl,t=totals();STAT.co=c.nom||'';STAT.fac=st.no;STAT.due=t.due;
  var rows=st.lignes.filter(function(l){return l.d||+l.p}).map(function(l){var lt=r2((+l.q||0)*(+l.p||0));
   return '<tr><td>'+esc(l.d)+'</td><td>'+esc(l.t)+'</td><td class="n">'+esc(l.q)+'</td><td class="n">'+$$(+l.p||0)+'</td><td class="n">'+$$(lt)+'</td></tr>'}).join('');
  var ft=[];if(c.rbq)ft.push('Licence RBQ : '+esc(c.rbq));if(c.tps)ft.push('N° TPS : '+esc(c.tps));if(c.tvq)ft.push('N° TVQ : '+esc(c.tvq));
@@ -603,7 +646,7 @@ function calc(){
  var mm=r2(mat*n(st.pm)/100),base=r2(mat+mm+mo+aut),ct=r2(base*n(st.ct)/100),s1=r2(base+ct),
   fg=r2(s1*n(st.fg)/100),s2=r2(s1+fg),pf=r2(s2*n(st.pf)/100),prix=r2(s2+pf),
   tps=st.tax?r2(prix*0.05):0,tvq=st.tax?r2(prix*0.09975):0,tot=r2(prix+tps+tvq);
- last={prix:prix,tot:tot,hrs:hrs,mat:mat,mo:mo,aut:aut,pf:pf};
+ last={prix:prix,tot:tot,hrs:hrs,mat:mat,mo:mo,aut:aut,pf:pf};STAT.est=prix;
  var rows=[['Matériel (coûtant)',mat],['Majoration du matériel',mm],['Main-d\'œuvre',mo],['Autres frais',aut],['Contingence',ct],['Frais généraux',fg],['Profit',pf]].filter(function(r){return r[1]!==0});
  var h=rows.map(function(r){return '<div><span>'+r[0]+'</span><span>'+m$(r[1])+'</span></div>'}).join('');
  h+='<div class="t"><span>Prix avant taxes</span><span>'+m$(prix)+'</span></div>';
@@ -847,19 +890,50 @@ $('p-hdr').addEventListener('click',function(ev){
 links();render();
 })();
 
+/* ========== ACCUEIL ========== */
+(function(){
+function hm(m){m=Math.round(m||0);return Math.floor(m/60)+'h'+String(m%60).padStart(2,'0')}
+function mon(x){return (x||0).toLocaleString('fr-CA',{style:'currency',currency:'CAD'})}
+function greet(){var h=new Date().getHours();return h<5?'Bonsoir':h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir'}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function render(){
+ var S=window.STAT||{};
+ $('hm-greet').textContent=greet();
+ $('hm-co').textContent=S.co||'';
+ $('hm-date').textContent=cap(new Date().toLocaleDateString('fr-CA',{weekday:'long',day:'numeric',month:'long'}));
+ $('hm-hrs').textContent=hm(S.hrs);
+ $('hm-hrsd').textContent=((S.hrs||0)/60).toFixed(2).replace('.',',')+' h';
+ $('hm-fac').textContent=mon(S.due);$('hm-est').textContent=mon(S.est);
+ $('s-heures').textContent=S.hrs?hm(S.hrs)+' cette semaine':'Aucune heure saisie';
+ $('s-est').textContent=S.est?'Dernier prix : '+mon(S.est):'Nouvelle soumission';
+ $('s-factures').textContent=S.fac?'N° '+S.fac+' en cours':'Nouvelle facture';
+}
+document.addEventListener('tabshown',function(ev){if(ev.detail==='home')render()});
+$('t-home').addEventListener('click',function(ev){
+ var b=ev.target.closest('[data-go]');
+ if(b)document.dispatchEvent(new CustomEvent('showtab',{detail:b.dataset.go}));
+});
+})();
+
 /* ========== ONGLETS ========== */
 (function(){
-var T=['heures','est','prix','factures','frac'],KEY='tab-v1';
+var T=['home','heures','est','prix','factures','frac'];
 function show(n){
- if(T.indexOf(n)<0)n='heures';
- T.forEach(function(t){var on=t===n;$('t-'+t).hidden=!on;var b=$('b-'+t);b.setAttribute('aria-selected',on?'true':'false');b.className=on?'on':''});
- try{localStorage.setItem(KEY,n)}catch(e){}
+ if(T.indexOf(n)<0)n='home';
+ T.forEach(function(t){
+  var on=t===n;$('t-'+t).hidden=!on;
+  var b=$('b-'+t);if(b){b.setAttribute('aria-selected',on?'true':'false');b.className=on?'on':''}
+ });
+ $('pills').hidden=(n==='home');
  window.scrollTo(0,0);
+ var cur=$('b-'+n),pl=$('pills');
+ if(cur)pl.scrollLeft=cur.offsetLeft-(pl.clientWidth-cur.offsetWidth)/2;
+ document.dispatchEvent(new CustomEvent('tabshown',{detail:n}));
 }
-T.forEach(function(t){$('b-'+t).onclick=function(){show(t)}});
+T.forEach(function(t){var b=$('b-'+t);if(b)b.onclick=function(){show(t)}});
+$('home-b').onclick=function(){show('home')};
 document.addEventListener('showtab',function(ev){show(ev.detail)});
-var s='heures';try{s=localStorage.getItem(KEY)||'heures'}catch(e){}
-show(s);
+show('home');
 })();
 </script>
 </body>
