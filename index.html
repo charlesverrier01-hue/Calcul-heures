@@ -3,21 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Calcul d'heures</title>
+<title>Outils de chantier</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
 <style>
-:root{--bg:#EEF1F4;--card:#fff;--ink:#15202B;--mute:#5B6877;--line:#D5DBE2;--acc:#1D4ED8;--accink:#fff;--ot:#B45309;--otbg:#FEF3E2;
+:root{--bg:#EEF1F4;--card:#fff;--ink:#15202B;--mute:#5B6877;--line:#D5DBE2;--acc:#1D4ED8;--accink:#fff;--ot:#B45309;--key:#E4E9EF;--op:#D6E2FF;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--otbg:#33261A}}
-:root[data-theme="dark"]{--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--otbg:#33261A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--key:#27323F;--op:#2A3B5C}}
+:root[data-theme="dark"]{--bg:#10171F;--card:#1A232E;--ink:#E7ECF1;--mute:#98A5B3;--line:#2C3947;--acc:#6B97FF;--accink:#0B1220;--ot:#F5A94A;--key:#27323F;--op:#2A3B5C}
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.4 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:560px;margin:0 auto;padding:16px 14px 40px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.4 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:84px}
+main{max-width:1000px;margin:0 auto}
+.tab{padding:16px 14px 24px}
+.narrow{max-width:560px;margin:0 auto}
 h1{font:700 26px/1.1 "Barlow Condensed",Barlow,system-ui,sans-serif;margin:4px 0 14px}
+.tab label{display:block;font-size:13px;color:var(--mute);margin:8px 0 2px}
+input,select,textarea{width:100%;min-height:44px;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-variant-numeric:tabular-nums}
+textarea{min-height:64px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+button{min-height:46px;font:600 16px Barlow,system-ui,sans-serif;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;padding:0 14px}
+button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+.w{width:100%}
+.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.card h2,summary{font:700 19px/1.1 "Barlow Condensed",Barlow,sans-serif;margin:0 0 8px}
+summary{cursor:pointer;margin:0}
+details[open] summary{margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.msg{min-height:20px;font-size:14px;color:var(--mute);margin-top:8px}
+/* navigation */
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.tabs button{flex:1;border:0;border-radius:0;background:transparent;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 6px;font-size:12px;min-height:56px}
+.tabs button.on{color:var(--acc);box-shadow:inset 0 3px 0 var(--acc)}
+/* heures */
 .sum{background:var(--acc);color:var(--accink);border-radius:14px;padding:16px 18px;margin-bottom:14px}
 .sum .lab{font-size:14px;opacity:.85}
-.sum .big{font:700 48px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;margin:2px 0 2px}
+.sum .big{font:700 48px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;margin:2px 0}
 .sum .dec{font-size:15px;opacity:.9;font-variant-numeric:tabular-nums}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .split div{background:rgba(255,255,255,.14);border-radius:10px;padding:9px 11px}
@@ -26,26 +47,77 @@ h1{font:700 26px/1.1 "Barlow Condensed",Barlow,system-ui,sans-serif;margin:4px 0
 .pay{margin-top:10px;font-size:15px}
 .day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
 .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.top strong{font-weight:700}
-.tot{font:600 18px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--mute)}
-.tot.on{color:var(--ink)}
+.dt{font:600 18px/1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--mute)}
+.dt.on{color:var(--ink)}
 .f{display:grid;grid-template-columns:1fr 1fr 78px;gap:8px}
-label{display:block;font-size:13px;color:var(--mute);margin-bottom:2px}
-input{width:100%;min-height:44px;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-variant-numeric:tabular-nums}
-input:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+.f label,.s3 label{margin-top:0}
 .note{font-size:13px;color:var(--ot);margin-top:5px;display:none}
-.set{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:14px 0}
-.set h2{font:700 18px/1 "Barlow Condensed",Barlow,sans-serif;margin:0 0 10px}
 .s3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
-.btns{display:flex;gap:8px}
-button{flex:1;min-height:46px;font:600 16px Barlow,system-ui,sans-serif;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
-button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
-.msg{min-height:20px;font-size:14px;color:var(--mute);margin-top:8px}
+.btns{display:flex;gap:8px;margin-top:10px}
+.btns button{flex:1}
+/* factures */
+.wrap{display:grid;gap:16px;max-width:1000px;margin:0 auto}
+@media(min-width:900px){.wrap{grid-template-columns:420px 1fr;align-items:start}.ui{position:sticky;top:12px}}
+.ln{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px}
+.ln .r{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:6px;margin-top:6px}
+.ln .b{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-weight:600;font-variant-numeric:tabular-nums}
+.chk{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:15px;color:var(--ink)}
+.tab .chk{color:var(--ink);font-size:15px}
+.chk input{width:22px;min-height:22px}
+.pv{overflow-x:auto}
+.sheet{background:#fff;color:#111;width:100%;min-width:640px;max-width:816px;margin:0 auto;padding:36px 40px;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,.18);font:14px/1.45 Helvetica,Arial,sans-serif}
+.sheet .hd{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid #1D4ED8;padding-bottom:14px}
+.sheet .co b{font-size:22px;display:block;margin-bottom:2px}
+.sheet .ti{text-align:right}
+.sheet .ti h3{margin:0;font-size:26px;letter-spacing:2px;color:#1D4ED8}
+.sheet .cl{margin:18px 0}
+.sheet .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#666}
+.sheet table{width:100%;border-collapse:collapse;margin-top:8px}
+.sheet th{background:#EAF0FF;text-align:left;font-size:12px;padding:7px 8px}
+.sheet td{padding:7px 8px;border-bottom:1px solid #ddd;vertical-align:top}
+.sheet .n{text-align:right;white-space:nowrap}
+.sheet .tt{margin:14px 0 0 auto;width:260px}
+.sheet .tt div{display:flex;justify-content:space-between;padding:3px 0}
+.sheet .tt .tot{border-top:2px solid #111;font-weight:700;font-size:16px;margin-top:4px;padding-top:6px}
+.sheet .tt .due{background:#EAF0FF;font-weight:700;padding:6px 8px;margin-top:6px}
+.sheet .nt{margin-top:22px;white-space:pre-wrap}
+.sheet .ft{margin-top:24px;padding-top:8px;border-top:1px solid #ccc;font-size:12px;color:#444}
+/* prix */
+.grp h3{font:700 15px/1 "Barlow Condensed",Barlow,sans-serif;text-transform:uppercase;letter-spacing:.5px;color:var(--mute);margin:14px 0 2px}
+.st{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.st a{color:var(--acc);font-weight:600;text-decoration:none}
+.st a:last-child:not(:first-child){font-weight:400;font-size:14px;text-align:right}
+.best{font-weight:700;color:var(--acc);margin-top:8px;min-height:20px}
+/* estimation */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:36px;font-size:14px;padding:0 10px}
+.bk div{display:flex;justify-content:space-between;gap:12px;padding:4px 0;font-variant-numeric:tabular-nums}
+.bk .t{border-top:2px solid var(--ink);font-weight:700;font-size:18px;margin-top:6px;padding-top:8px}
+/* fractions */
+.disp{font:600 26px/1.2 "Barlow Condensed",Barlow,sans-serif;min-height:52px;text-align:right}
+.res{text-align:right}
+.res .big{font:700 40px/1.1 "Barlow Condensed",Barlow,sans-serif;font-variant-numeric:tabular-nums;color:var(--acc);word-break:break-word}
+.res .mu{font-size:14px;color:var(--mute);font-variant-numeric:tabular-nums;margin-top:4px}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pad button{min-height:56px;font-size:22px;background:var(--key);padding:0}
+.pad button.o{background:var(--op);color:var(--acc)}
+.pad button.eq{background:var(--acc);color:var(--accink)}
+.pad .s2{grid-column:span 2}
+@media print{
+ @page{size:letter;margin:12mm}
+ body{background:#fff;padding:0}
+ .tabs,.ui{display:none!important}
+ .tab{padding:0}
+ .wrap{display:block}
+ .pv{overflow:visible}
+ .sheet{box-shadow:none;border-radius:0;padding:0;min-width:0;max-width:none}
+}
 </style>
 </head>
 <body>
 <main>
+
+<section id="t-heures" class="tab narrow">
 <h1>Calcul d'heures</h1>
 <section class="sum" aria-live="polite">
  <div class="lab">Total de la semaine</div>
@@ -58,7 +130,7 @@ button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
  <div class="pay" id="pay" hidden></div>
 </section>
 <div id="days"></div>
-<section class="set">
+<section class="card">
  <h2>Réglages</h2>
  <div class="s3">
   <div><label for="seuil">Seuil (h/sem.)</label><input id="seuil" type="number" inputmode="decimal" min="0" step="0.5"></div>
@@ -67,32 +139,183 @@ button.p{background:var(--acc);color:var(--accink);border-color:var(--acc)}
  </div>
  <p class="hint">Par défaut : 40 h par semaine, majoration de 50 % (×1,5), selon la Loi sur les normes du travail. Les règles de la construction (CCQ) ou d'une convention collective peuvent différer : ajuste le seuil au besoin.</p>
 </section>
+<button class="p w" id="toInv" type="button">Ajouter ces heures à une facture</button>
 <div class="btns">
- <button class="p" id="copy">Copier le tableau</button>
- <button id="reset">Tout effacer</button>
+ <button id="copy" type="button">Copier le tableau</button>
+ <button id="reset" type="button">Tout effacer</button>
 </div>
 <div class="msg" id="msg" role="status"></div>
+</section>
+
+<section id="t-est" class="tab narrow" hidden>
+<h1>Estimation</h1>
+<section class="sum" aria-live="polite">
+ <div class="lab">Prix avant taxes</div>
+ <div class="big" id="e-prix">0,00 $</div>
+ <div class="dec" id="e-tot">Total taxes incluses : 0,00 $</div>
+ <div class="split">
+  <div><small>Profit</small><b id="e-pf">0,00 $</b></div>
+  <div><small>Heures totales</small><b id="e-hrs">0h00</b></div>
+ </div>
+</section>
+<div class="card"><h2>Projet</h2>
+ <label for="e-nom">Projet ou client</label><input id="e-nom" data-g="nom">
+ <label for="e-taux">Taux horaire coûtant de la main-d'œuvre ($/h)</label><input id="e-taux" type="number" inputmode="decimal" min="0" step="0.01" data-g="taux">
+</div>
+<div class="card"><h2>Main-d'œuvre</h2><div id="e-lm"></div><button class="w" id="e-addlm" type="button">+ Ajouter une tâche</button></div>
+<div class="card"><h2>Matériel</h2>
+ <div class="chips" id="e-chips"></div>
+ <div id="e-mat" style="margin-top:10px"></div>
+ <button class="w" id="e-addmat" type="button">+ Ajouter une ligne</button>
+ <p class="hint">Les coûts que tu entres sont retenus et pré-remplis la prochaine fois.</p>
+</div>
+<div class="card"><h2>Autres frais</h2><div id="e-aut"></div><button class="w" id="e-addaut" type="button">+ Ajouter un frais</button>
+ <p class="hint">Déplacement, location d'outils, permis, sous-traitants.</p></div>
+<div class="card"><h2>Majorations (%)</h2>
+ <div class="g2">
+  <div><label for="e-pm">Sur le matériel</label><input id="e-pm" type="number" inputmode="decimal" min="0" step="any" data-g="pm"></div>
+  <div><label for="e-ct">Contingence</label><input id="e-ct" type="number" inputmode="decimal" min="0" step="any" data-g="ct"></div>
+  <div><label for="e-fg">Frais généraux</label><input id="e-fg" type="number" inputmode="decimal" min="0" step="any" data-g="fg"></div>
+  <div><label for="e-pf2">Profit</label><input id="e-pf2" type="number" inputmode="decimal" min="0" step="any" data-g="pf"></div>
+ </div>
+ <p class="hint">Mets les pourcentages de ton entreprise. Laissés vides, ils comptent pour 0 %. Ils s'appliquent dans cet ordre : majoration du matériel, contingence, frais généraux, puis profit.</p>
+ <label class="chk"><input type="checkbox" id="e-tx" data-g="tax">Calculer TPS (5 %) et TVQ (9,975 %)</label>
+</div>
+<div class="card"><h2>Détail</h2><div class="bk" id="e-out"></div></div>
+<button class="p w" id="e-inv" type="button">Envoyer à une facture</button>
+<div class="btns">
+ <button id="e-copy" type="button">Copier le résumé</button>
+ <button id="e-new" type="button">Nouvelle estimation</button>
+</div>
+<div class="msg" id="e-msg" role="status"></div>
+</section>
+
+<section id="t-prix" class="tab narrow" hidden>
+<h1>Prix à l'unité</h1>
+<div class="card"><h2>Chercher dans les sites</h2>
+ <label for="p-q" style="margin-top:0">Article</label>
+ <input id="p-q" placeholder="ex. fil NMD90 14/2 75 m" autocomplete="off">
+ <div class="grp" id="p-stores"></div>
+ <p class="hint">Les liens ouvrent le site du magasin. Avec un article saisi, un second lien lance une recherche Google limitée à ce site. Chez les distributeurs électriques, les prix passent par un compte Pro (Lumen, par exemple, propose d'en créer un). Entre ensuite les prix trouvés ci-dessous.</p>
+</div>
+<div class="card"><h2>Home Depot (API)</h2>
+ <p class="hint" style="margin-top:0">Cherche l'article saisi plus haut chez Home Depot Canada, sans quitter l'app. L'offre choisie est ajoutée à l'article sélectionné dans « Ajouter à l'article », plus bas.</p>
+ <button class="p w" id="p-hd" type="button">Chercher sur Home Depot</button>
+ <div id="p-hdr"></div>
+ <details style="margin-top:10px"><summary>Réglages du relais</summary>
+  <label for="p-rel">Adresse du relais</label><input id="p-rel" type="url" placeholder="https://mon-relais.mon-compte.workers.dev" autocomplete="off">
+  <label for="p-tok">Jeton de l'app</label><input id="p-tok" type="password" autocomplete="off">
+  <p class="hint">Le relais garde ta clé SerpApi secrète : voir le fichier relais-homedepot.js pour l'installer. Ces deux champs restent dans ton navigateur.</p>
+ </details>
+</div>
+<div class="card"><h2>Importer un prix depuis une page</h2>
+ <details><summary>Installer le favori (une seule fois)</summary>
+  <p class="hint">Ordinateur : glisse ce bouton dans ta barre de favoris.</p>
+  <a id="p-bm" href="#" style="display:inline-block;padding:8px 12px;background:var(--acc);color:var(--accink);border-radius:8px;text-decoration:none;font-weight:600">Copier le prix</a>
+  <p class="hint">Téléphone, ou si le glisser ne marche pas : touche « Copier le code », crée un favori sur n'importe quelle page, puis remplace son adresse (URL) par le code collé.</p>
+  <button class="w" id="p-bmc" type="button">Copier le code du favori</button>
+ </details>
+ <p class="hint">Ensuite, sur la page d'un produit, ouvre le favori : il copie le magasin, le nom et le prix. Reviens ici et touche « Importer ».</p>
+ <label for="p-imp">Texte copié (facultatif : sinon le presse-papiers est lu)</label>
+ <textarea id="p-imp" placeholder="PRIX|magasin|nom|prix"></textarea>
+ <label for="p-impi">Ajouter à l'article</label><select id="p-impi"></select>
+ <button class="p w" id="p-impb" type="button" style="margin-top:10px">Importer l'offre</button>
+ <p class="hint">C'est le prix affiché sur la page. Entre ensuite la quantité dans l'emballage pour obtenir le prix à l'unité. Certains sites peuvent bloquer le favori : à tester magasin par magasin.</p>
+</div>
+<div id="p-items"></div>
+<datalist id="p-dl"></datalist>
+<button class="p w" id="p-add" type="button">+ Comparer un nouvel article</button>
+<div class="msg" id="p-msg" role="status"></div>
+</section>
+
+<section id="t-factures" class="tab" hidden>
+<div class="wrap">
+<div class="ui">
+ <h1>Factures</h1>
+ <div class="card"><details id="coD"><summary>Mon entreprise</summary>
+  <label for="c1">Nom de l'entreprise</label><input id="c1" data-b="co.nom" autocomplete="organization">
+  <label for="c2">Adresse</label><textarea id="c2" data-b="co.adr"></textarea>
+  <div class="g2"><div><label for="c3">Téléphone</label><input id="c3" type="tel" data-b="co.tel"></div>
+  <div><label for="c4">Courriel</label><input id="c4" type="email" data-b="co.courriel"></div></div>
+  <label for="c5">N° de licence RBQ</label><input id="c5" data-b="co.rbq">
+  <div class="g2"><div><label for="c6">N° TPS</label><input id="c6" data-b="co.tps"></div>
+  <div><label for="c7">N° TVQ</label><input id="c7" data-b="co.tvq"></div></div>
+  <p class="hint">Ces infos sont gardées dans ton navigateur pour les prochaines factures.</p>
+ </details></div>
+ <div class="card"><h2>Facture et client</h2>
+  <div class="g2"><div><label for="f1">N° de facture</label><input id="f1" data-b="no"></div>
+  <div><label for="f2">Date</label><input id="f2" type="date" data-b="date"></div></div>
+  <label for="f3">Conditions</label><input id="f3" data-b="cond">
+  <label for="k1">Client</label><input id="k1" data-b="cl.nom">
+  <label for="k2">Adresse des travaux / du client</label><textarea id="k2" data-b="cl.adr"></textarea>
+  <label for="k3">Téléphone ou courriel du client</label><input id="k3" data-b="cl.tel">
+ </div>
+ <div class="card"><h2>Travaux et matériel</h2><div id="lines"></div>
+  <button class="w" id="add" type="button">+ Ajouter une ligne</button>
+ </div>
+ <div class="card"><h2>Taxes, acompte et notes</h2>
+  <label class="chk"><input type="checkbox" id="tx" data-b="tax">Appliquer TPS (5 %) et TVQ (9,975 %)</label>
+  <label for="ac">Acompte déjà reçu ($)</label><input id="ac" type="number" inputmode="decimal" min="0" step="0.01" data-b="acompte">
+  <label for="nt">Notes et conditions</label><textarea id="nt" data-b="notes"></textarea>
+ </div>
+ <button class="p w" id="pdf" type="button">Générer le PDF</button>
+ <p class="hint">Dans la fenêtre d'impression, choisis « Enregistrer en PDF » (ordinateur) ou Partager, puis « Enregistrer dans Fichiers » (téléphone).</p>
+ <button class="w" id="nw" type="button" style="margin-top:8px">Nouvelle facture</button>
+</div>
+<div class="pv"><div class="sheet" id="sheet"></div></div>
+</div>
+</section>
+
+<section id="t-frac" class="tab narrow" hidden>
+<h1>Fractions (pieds et pouces)</h1>
+<div class="card">
+ <label for="ex">Calcul</label>
+ <input id="ex" class="disp" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="5' 3 1/2&quot; + 2' 7 3/4&quot;">
+</div>
+<div class="card res" aria-live="polite">
+ <div class="big" id="rs">—</div>
+ <div class="mu" id="rd1"></div>
+ <div class="mu" id="rd2"></div>
+</div>
+<label for="pr" style="margin-top:0">Arrondir au</label>
+<select id="pr"><option value="2">1/2 po</option><option value="4">1/4 po</option><option value="8">1/8 po</option><option value="16" selected>1/16 po</option><option value="32">1/32 po</option><option value="64">1/64 po</option></select>
+<div class="pad" id="pad"></div>
+<p class="hint">Écris ou tape par exemple 5' 3 1/2" (pieds, pouces et fraction avec un espace). Additionne et soustrais des longueurs, multiplie ou divise par un nombre simple (sans ' ni "). Le touche = garde le résultat pour enchaîner.</p>
+</section>
+
 </main>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+ <button type="button" role="tab" id="b-heures"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Heures</button>
+ <button type="button" role="tab" id="b-est"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/></svg>Estimation</button>
+ <button type="button" role="tab" id="b-prix"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>Prix</button>
+ <button type="button" role="tab" id="b-factures"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Factures</button>
+ <button type="button" role="tab" id="b-frac"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></svg>Fractions</button>
+</nav>
+
 <script>
+function $(id){return document.getElementById(id)}
+function r2(x){return Math.round((x+Number.EPSILON)*100)/100}
+
+/* ========== HEURES ========== */
 (function(){
 var D=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var KEY='calcul-heures-v1';
-var st={rows:D.map(function(){return{s:'',e:'',p:30}}),seuil:40,maj:1.5,taux:''};
+function blankRows(){return D.map(function(){return{s:'',e:'',p:30}})}
+var st={rows:blankRows(),seuil:40,maj:1.5,taux:''},lastTot=0;
 try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.rows&&o.rows.length===7)st=o}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
-function $(id){return document.getElementById(id)}
 function tm(v){if(!v)return null;var a=v.split(':');return (+a[0])*60+(+a[1])}
 function minutes(r){
  var s=tm(r.s),e=tm(r.e);if(s===null||e===null)return null;
  var m=e-s;if(m<=0)m+=1440;
- var p=Math.max(0,+r.p||0),over=p>m;
- return{m:Math.max(0,m-p),over:over};
+ var p=Math.max(0,+r.p||0);
+ return{m:Math.max(0,m-p),over:p>m};
 }
 function hm(m){m=Math.round(m);return Math.floor(m/60)+'h'+String(m%60).padStart(2,'0')}
 function dc(m){return (m/60).toFixed(2).replace('.',',')+' h'}
 function money(x){return x.toLocaleString('fr-CA',{style:'currency',currency:'CAD'})}
-var box=$('days');
-box.innerHTML=D.map(function(d,i){return '<div class="day"><div class="top"><strong>'+d+'</strong><span class="tot" id="t'+i+'">–</span></div>'+
+$('days').innerHTML=D.map(function(d,i){return '<div class="day"><div class="top"><strong>'+d+'</strong><span class="dt" id="t'+i+'">–</span></div>'+
  '<div class="f"><div><label for="s'+i+'">Début</label><input id="s'+i+'" type="time" data-i="'+i+'" data-k="s"></div>'+
  '<div><label for="e'+i+'">Fin</label><input id="e'+i+'" type="time" data-i="'+i+'" data-k="e"></div>'+
  '<div><label for="p'+i+'">Pause (min)</label><input id="p'+i+'" type="number" inputmode="numeric" min="0" step="5" data-i="'+i+'" data-k="p"></div></div>'+
@@ -105,10 +328,11 @@ function calc(){
  var tot=0;
  st.rows.forEach(function(r,i){
   var x=minutes(r),t=$('t'+i);
-  if(x===null){t.textContent='–';t.className='tot';$('n'+i).style.display='none';return}
-  tot+=x.m;t.textContent=hm(x.m)+' · '+dc(x.m);t.className='tot on';
+  if(x===null){t.textContent='–';t.className='dt';$('n'+i).style.display='none';return}
+  tot+=x.m;t.textContent=hm(x.m)+' · '+dc(x.m);t.className='dt on';
   $('n'+i).style.display=x.over?'block':'none';
  });
+ lastTot=tot;
  var seuil=Math.max(0,+st.seuil||0)*60,maj=Math.max(1,+st.maj||1);
  var reg=Math.min(tot,seuil),ot=Math.max(0,tot-seuil);
  $('tw').textContent=hm(tot);$('twd').textContent=dc(tot);
@@ -117,7 +341,7 @@ function calc(){
  var tx=parseFloat(st.taux),pay=$('pay');
  if(tx>0){pay.hidden=false;pay.textContent='Salaire brut estimé : '+money(reg/60*tx+ot/60*tx*maj)}else pay.hidden=true;
 }
-document.addEventListener('input',function(ev){
+$('t-heures').addEventListener('input',function(ev){
  var t=ev.target;
  if(t.dataset&&t.dataset.i!==undefined){var v=t.value;st.rows[+t.dataset.i][t.dataset.k]=t.dataset.k==='p'?(v===''?0:+v):v}
  else if(t.id==='seuil'||t.id==='maj'||t.id==='taux'){st[t.id]=t.value}
@@ -134,13 +358,508 @@ $('copy').onclick=function(){
  function ko(){m.textContent='Copie impossible ici. Fais une capture d\'écran du résumé.'}
  try{navigator.clipboard.writeText(txt).then(ok,ko)}catch(e){ko()}
 };
+$('toInv').onclick=function(){
+ if(!lastTot){$('msg').textContent='Aucune heure à ajouter : remplis au moins un jour.';return}
+ var tx=parseFloat(st.taux);
+ document.dispatchEvent(new CustomEvent('addLine',{detail:{d:'Main-d\'œuvre (heures de la semaine)',t:'Main-d\'œuvre',q:r2(lastTot/60),p:tx>0?tx:''}}));
+ $('msg').textContent='';
+ document.dispatchEvent(new CustomEvent('showtab',{detail:'factures'}));
+};
 var armed=false,rb=$('reset');
 rb.onclick=function(){
  if(!armed){armed=true;rb.textContent='Confirmer l\'effacement';setTimeout(function(){armed=false;rb.textContent='Tout effacer'},4000);return}
- st.rows=D.map(function(){return{s:'',e:'',p:30}});armed=false;rb.textContent='Tout effacer';
+ st.rows=blankRows();armed=false;rb.textContent='Tout effacer';
  save();fill();calc();$('msg').textContent='Semaine effacée.';
 };
 fill();calc();
+})();
+
+/* ========== FACTURES ========== */
+(function(){
+var KEY='factures-v1',LAB='Main-d\'œuvre';
+function p2(n){return String(n).padStart(2,'0')}
+function today(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())}
+function newLine(){return{d:'',t:LAB,q:1,p:''}}
+function blank(){return{no:'',date:today(),cond:'Payable sur réception',cl:{nom:'',adr:'',tel:''},lignes:[newLine()],tax:true,acompte:'',notes:'Merci de votre confiance.'}}
+var st=blank();st.co={nom:'',adr:'',tel:'',courriel:'',rbq:'',tps:'',tvq:''};st.no=new Date().getFullYear()+'-001';
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.lignes&&o.co&&o.cl)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function $$(x){return r2(x).toLocaleString('fr-CA',{style:'currency',currency:'CAD'})}
+function gp(path){var a=path.split('.'),o=st;for(var i=0;i<a.length-1;i++)o=o[a[i]];return[o,a[a.length-1]]}
+function fill(){
+ document.querySelectorAll('#t-factures [data-b]').forEach(function(el){var x=gp(el.dataset.b);if(el.type==='checkbox')el.checked=!!x[0][x[1]];else el.value=x[0][x[1]]});
+}
+function lines(){
+ $('lines').innerHTML=st.lignes.map(function(l,i){var tot=r2((+l.q||0)*(+l.p||0));
+  return '<div class="ln"><input aria-label="Description" placeholder="Description (ex. Installation panneau 200 A)" value="'+esc(l.d)+'" data-i="'+i+'" data-k="d">'+
+  '<div class="r"><select aria-label="Type" data-i="'+i+'" data-k="t"><option'+(l.t===LAB?' selected':'')+'>'+LAB+'</option><option'+(l.t==='Matériel'?' selected':'')+'>Matériel</option><option'+(l.t==='Forfait'?' selected':'')+'>Forfait</option></select>'+
+  '<input aria-label="Quantité" type="number" inputmode="decimal" min="0" step="any" placeholder="Qté" value="'+esc(l.q)+'" data-i="'+i+'" data-k="q">'+
+  '<input aria-label="Prix unitaire" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Prix $" value="'+esc(l.p)+'" data-i="'+i+'" data-k="p"></div>'+
+  '<div class="b"><span id="lt'+i+'">'+$$(tot)+'</span><button type="button" data-del="'+i+'" style="min-height:38px">Retirer</button></div></div>'}).join('');
+}
+function totals(){
+ var sub=0;st.lignes.forEach(function(l){sub+=r2((+l.q||0)*(+l.p||0))});sub=r2(sub);
+ var tps=st.tax?r2(sub*0.05):0,tvq=st.tax?r2(sub*0.09975):0,tot=r2(sub+tps+tvq),ac=Math.max(0,+st.acompte||0);
+ return{sub:sub,tps:tps,tvq:tvq,tot:tot,ac:ac,due:r2(tot-ac)};
+}
+function fd(s){if(!s)return'';var d=new Date(s+'T00:00:00');return isNaN(d)?esc(s):d.toLocaleDateString('fr-CA',{year:'numeric',month:'long',day:'numeric'})}
+function prev(){
+ var c=st.co,k=st.cl,t=totals();
+ var rows=st.lignes.filter(function(l){return l.d||+l.p}).map(function(l){var lt=r2((+l.q||0)*(+l.p||0));
+  return '<tr><td>'+esc(l.d)+'</td><td>'+esc(l.t)+'</td><td class="n">'+esc(l.q)+'</td><td class="n">'+$$(+l.p||0)+'</td><td class="n">'+$$(lt)+'</td></tr>'}).join('');
+ var ft=[];if(c.rbq)ft.push('Licence RBQ : '+esc(c.rbq));if(c.tps)ft.push('N° TPS : '+esc(c.tps));if(c.tvq)ft.push('N° TVQ : '+esc(c.tvq));
+ $('sheet').innerHTML=
+ '<div class="hd"><div class="co"><b>'+esc(c.nom||'Nom de l\'entreprise')+'</b>'+esc(c.adr).replace(/\n/g,'<br>')+(c.tel?'<br>'+esc(c.tel):'')+(c.courriel?'<br>'+esc(c.courriel):'')+'</div>'+
+ '<div class="ti"><h3>FACTURE</h3>N° '+esc(st.no)+'<br>'+fd(st.date)+'<br>'+esc(st.cond)+'</div></div>'+
+ '<div class="cl"><div class="lbl">Facturé à</div><b>'+esc(k.nom)+'</b><br>'+esc(k.adr).replace(/\n/g,'<br>')+(k.tel?'<br>'+esc(k.tel):'')+'</div>'+
+ '<table><thead><tr><th>Description</th><th>Type</th><th class="n">Qté</th><th class="n">Prix unit.</th><th class="n">Total</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+ '<div class="tt"><div><span>Sous-total</span><span>'+$$(t.sub)+'</span></div>'+
+ (st.tax?'<div><span>TPS (5 %)</span><span>'+$$(t.tps)+'</span></div><div><span>TVQ (9,975 %)</span><span>'+$$(t.tvq)+'</span></div>':'')+
+ '<div class="tot"><span>Total</span><span>'+$$(t.tot)+'</span></div>'+
+ (t.ac?'<div><span>Acompte reçu</span><span>− '+$$(t.ac)+'</span></div>':'')+
+ '<div class="due"><span>Solde dû</span><span>'+$$(t.due)+'</span></div></div>'+
+ (st.notes?'<div class="nt">'+esc(st.notes)+'</div>':'')+
+ (ft.length?'<div class="ft">'+ft.join(' &nbsp;·&nbsp; ')+'</div>':'');
+}
+var root=$('t-factures');
+root.addEventListener('input',function(ev){
+ var t=ev.target;
+ if(t.dataset.b){var x=gp(t.dataset.b);x[0][x[1]]=t.type==='checkbox'?t.checked:t.value}
+ else if(t.dataset.i!==undefined){var i=+t.dataset.i;st.lignes[i][t.dataset.k]=t.value;var l=st.lignes[i];$('lt'+i).textContent=$$((+l.q||0)*(+l.p||0))}
+ else return;
+ save();prev();
+});
+root.addEventListener('click',function(ev){
+ var d=ev.target.dataset&&ev.target.dataset.del;
+ if(d===undefined)return;
+ st.lignes.splice(+d,1);if(!st.lignes.length)st.lignes.push(newLine());
+ save();lines();prev();
+});
+$('add').onclick=function(){st.lignes.push(newLine());save();lines();prev()};
+$('pdf').onclick=function(){prev();window.print()};
+document.addEventListener('addLine',function(ev){
+ var n=st.lignes,x=ev.detail;
+ if(n.length===1&&!n[0].d&&!n[0].p)n.length=0;
+ n.push({d:x.d,t:x.t,q:x.q,p:x.p});
+ save();lines();prev();
+});
+var armed=false,nb=$('nw');
+nb.onclick=function(){
+ if(!armed){armed=true;nb.textContent='Confirmer : nouvelle facture vierge';setTimeout(function(){armed=false;nb.textContent='Nouvelle facture'},4000);return}
+ var m=/^(.*?)(\d+)$/.exec(st.no||''),next=m?m[1]+String(+m[2]+1).padStart(m[2].length,'0'):st.no;
+ var co=st.co,b=blank();b.co=co;b.no=next;st=b;armed=false;nb.textContent='Nouvelle facture';
+ save();fill();lines();prev();window.scrollTo(0,0);
+};
+fill();lines();prev();
+if(!st.co.nom)$('coD').open=true;
+})();
+
+/* ========== FRACTIONS ========== */
+(function(){
+var ex=$('ex'),pr=$('pr');
+function gcd(a,b){return b?gcd(b,a%b):a}
+function fmt(inch,den){
+ var sg=inch<0?'−':'',u=Math.round(Math.abs(inch)*den);
+ if(u===0)return'0"';
+ var whole=Math.floor(u/den),rem=u%den,g=gcd(rem,den),fr=rem?(rem/g)+'/'+(den/g):'';
+ var ft=Math.floor(whole/12),inn=whole%12,out=[];
+ if(ft)out.push(ft+"'");
+ if(inn||rem)out.push((inn?inn:'')+(inn&&rem?' ':'')+fr+'"');
+ return sg+out.join(' ');
+}
+function nf(x,d){return x.toLocaleString('fr-CA',{maximumFractionDigits:d})}
+function evalExpr(raw){
+ var s=raw.replace(/[\u2212\u2013\u2014]/g,'-').replace(/[\u2019\u2018\u2032]/g,"'").replace(/[\u201C\u201D\u2033]/g,'"').replace(/[xX*]/g,'×'),i=0;
+ function ws(){while(i<s.length&&s[i]===' ')i++}
+ function num(){var m=/^(?:\d+(?:\.\d+)?|\.\d+)/.exec(s.slice(i));if(!m)return null;i+=m[0].length;return m[0]}
+ function qty(){
+  var st0=i,a=num();if(a===null){i=st0;return null}
+  if(s[i]==='/'){i++;var d=num();if(d===null||+d===0)throw'Fraction invalide';return+a/+d}
+  var save=i;ws();
+  var m=/^(\d+)\/(\d+)/.exec(s.slice(i));
+  if(m&&i>save){i+=m[0].length;if(+m[2]===0)throw'Fraction invalide';return+a+(+m[1])/(+m[2])}
+  i=save;return+a;
+ }
+ function operand(){
+  ws();var neg=false;if(s[i]==='-'){neg=true;i++;ws()}
+  var q=qty();if(q===null)throw'Entrée incomplète';
+  var r;
+  if(s[i]==="'"){
+   i++;var inch=0,save=i;ws();
+   if(s[i]==='-'&&/\d/.test(s[i+1]||'')&&i===save)i++;
+   var q2=qty();
+   if(q2!==null){inch=q2;if(s[i]==='"')i++}else i=save;
+   r={v:q*12+inch,len:true};
+  }else if(s[i]==='"'){i++;r={v:q,len:true}}
+  else r={v:q,len:false};
+  if(neg)r.v=-r.v;return r;
+ }
+ function mul(a,b,op){
+  if(op==='×'){if(a.len&&b.len)throw'Multiplie par un nombre (sans \' ni ")';return{v:a.v*b.v,len:a.len||b.len}}
+  if(b.v===0)throw'Division par zéro';
+  if(a.len&&b.len)return{v:a.v/b.v,len:false};
+  if(!a.len&&b.len)throw'Impossible de diviser un nombre par une longueur';
+  return{v:a.v/b.v,len:a.len};
+ }
+ function term(){var a=operand();ws();while(s[i]==='×'||s[i]==='÷'){var op=s[i++];var b=operand();a=mul(a,b,op);ws()}return a}
+ function expr(){var a=term();ws();while(s[i]==='+'||s[i]==='-'){var op=s[i++];var b=term();a={v:op==='+'?a.v+b.v:a.v-b.v,len:a.len||b.len};ws()}return a}
+ var r=expr();ws();if(i<s.length)throw'Caractère inattendu : '+s[i];
+ return r;
+}
+function update(){
+ var rs=$('rs'),d1=$('rd1'),d2=$('rd2'),den=+pr.value;
+ d1.textContent='';d2.textContent='';
+ if(!ex.value.trim()){rs.textContent='—';return null}
+ try{
+  var r=evalExpr(ex.value);
+  if(!isFinite(r.v))throw'Résultat invalide';
+  if(r.len){
+   rs.textContent=fmt(r.v,den);
+   d1.textContent=nf(r.v,3)+' po décimaux';
+   d2.textContent=nf(r.v*25.4,1)+' mm · '+nf(r.v*2.54,2)+' cm · '+nf(r.v*0.0254,3)+' m';
+  }else{rs.textContent=nf(r.v,4);d1.textContent='Nombre sans unité'}
+  return{text:rs.textContent,len:r.len,v:r.v};
+ }catch(e){rs.textContent='—';d1.textContent=typeof e==='string'?e:'Expression invalide';return null}
+}
+function ins(t){
+ var a=ex.selectionStart,b=ex.selectionEnd;if(a==null){a=b=ex.value.length}
+ ex.value=ex.value.slice(0,a)+t+ex.value.slice(b);
+ var c=a+t.length;try{ex.setSelectionRange(c,c)}catch(e){}
+ update();
+}
+function back(){
+ var a=ex.selectionStart,b=ex.selectionEnd;if(a==null){a=b=ex.value.length}
+ if(a!==b){ex.value=ex.value.slice(0,a)+ex.value.slice(b);try{ex.setSelectionRange(a,a)}catch(e){}return update()}
+ if(a===0)return;
+ var n=/ [+−×÷] $/.test(ex.value.slice(0,a))?3:1;
+ ex.value=ex.value.slice(0,a-n)+ex.value.slice(a);
+ try{ex.setSelectionRange(a-n,a-n)}catch(e){}
+ update();
+}
+var keys=[['C','C'],['⌫','B'],['÷',' ÷ ','o'],['×',' × ','o'],
+ ['7','7'],['8','8'],['9','9'],['−',' − ','o'],
+ ['4','4'],['5','5'],['6','6'],['+',' + ','o'],
+ ['1','1'],['2','2'],['3','3'],["'","'",'o'],
+ ['0','0'],['.','.'],['/','/'],['"','"','o'],
+ ['espace',' ','','s2'],['=','=','eq','s2']];
+$('pad').innerHTML=keys.map(function(k,i){return '<button type="button" data-k="'+i+'" class="'+(k[2]||'')+' '+(k[3]||'')+'" style="'+(k[0]==='espace'?'font-size:16px':'')+'">'+k[0]+'</button>'}).join('');
+$('pad').addEventListener('pointerdown',function(ev){ev.preventDefault()});
+$('pad').addEventListener('click',function(ev){
+ var b=ev.target.closest('button');if(!b)return;
+ var k=keys[+b.dataset.k],v=k[1];
+ if(v==='C'){ex.value='';update()}
+ else if(v==='B')back();
+ else if(v==='='){var r=update();if(r){ex.value=r.text.replace(/^−/,'-');try{ex.setSelectionRange(ex.value.length,ex.value.length)}catch(e){}update()}}
+ else ins(v);
+});
+ex.addEventListener('input',update);
+pr.addEventListener('change',update);
+update();
+})();
+
+/* ========== ESTIMATION ========== */
+(function(){
+var KEY='estimation-v1',CK='estimation-cat-v1',LAB='Main-d\'œuvre';
+var DEF=['Prise 15 A','Interrupteur','Disjoncteur','Fil NMD90 (m)','Boîte de dérivation','Luminaire DEL','Panneau 200 A','Borne VÉ'];
+var PH={lm:'Tâche (ex. Tirer les fils, 1er étage)',mat:'Matériel (ex. Fil NMD90 14/2, rouleau)',aut:'Frais (ex. Déplacement)'};
+function fresh(){return{nom:'',lm:[{d:'',h:''}],mat:[{d:'',q:1,c:''}],aut:[{d:'',m:''}]}}
+var st=fresh();st.taux='';st.pm='';st.ct='';st.fg='';st.pf='';st.tax=true;
+var cat={},last={prix:0};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.lm&&o.mat&&o.aut)st=o}}catch(e){}
+try{var rc=localStorage.getItem(CK);if(rc){var oc=JSON.parse(rc);if(oc&&typeof oc==='object')cat=oc}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function saveCat(){try{localStorage.setItem(CK,JSON.stringify(cat))}catch(e){}}
+function n(x){var v=parseFloat(x);return isFinite(v)?v:0}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function m$(x){return r2(x).toLocaleString('fr-CA',{style:'currency',currency:'CAD'})}
+function hmm(h){var m=Math.round(h*60);return Math.floor(m/60)+'h'+String(m%60).padStart(2,'0')}
+function rowsHTML(name){
+ return st[name].map(function(l,i){
+  var a=' data-l="'+name+'" data-i="'+i+'"';
+  var h='<div class="ln"><input aria-label="Description" placeholder="'+PH[name]+'" value="'+esc(l.d)+'"'+a+' data-k="d">';
+  if(name==='lm')h+='<div class="r" style="grid-template-columns:1fr"><input aria-label="Heures" type="number" inputmode="decimal" min="0" step="any" placeholder="Heures" value="'+esc(l.h)+'"'+a+' data-k="h"></div>';
+  if(name==='mat')h+='<div class="r" style="grid-template-columns:1fr 1fr"><input aria-label="Quantité" type="number" inputmode="decimal" min="0" step="any" placeholder="Qté" value="'+esc(l.q)+'"'+a+' data-k="q"><input aria-label="Coût unitaire" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Coût unitaire $" value="'+esc(l.c)+'"'+a+' data-k="c"></div>';
+  if(name==='aut')h+='<div class="r" style="grid-template-columns:1fr"><input aria-label="Montant" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Montant $" value="'+esc(l.m)+'"'+a+' data-k="m"></div>';
+  h+='<div class="b"><span id="el-'+name+'-'+i+'"></span><button type="button" data-del="'+i+'" data-l="'+name+'" style="min-height:38px">Retirer</button></div></div>';
+  return h}).join('');
+}
+function list(name){$('e-'+name).innerHTML=rowsHTML(name)}
+function chips(){
+ var ks=Object.keys(cat).filter(function(k){return DEF.indexOf(k)<0}).slice(-8),all=DEF.concat(ks);
+ $('e-chips').innerHTML=all.map(function(k,i){return '<button type="button" data-chip="'+i+'">+ '+esc(k)+'</button>'}).join('');
+ $('e-chips').chipNames=all;
+}
+function fill(){
+ root.querySelectorAll('[data-g]').forEach(function(el){var v=st[el.dataset.g];if(el.type==='checkbox')el.checked=!!v;else el.value=v==null?'':v});
+ list('lm');list('mat');list('aut');chips();
+}
+function calc(){
+ var taux=n(st.taux),hrs=0,mo=0,mat=0,aut=0;
+ st.lm.forEach(function(l,i){var h=n(l.h),c=r2(h*taux);hrs+=h;mo+=c;var e=$('el-lm-'+i);if(e)e.textContent=m$(c)});
+ st.mat.forEach(function(l,i){var c=r2(n(l.q)*n(l.c));mat+=c;var e=$('el-mat-'+i);if(e)e.textContent=m$(c)});
+ st.aut.forEach(function(l,i){var c=n(l.m);aut+=c;var e=$('el-aut-'+i);if(e)e.textContent=m$(c)});
+ mo=r2(mo);mat=r2(mat);aut=r2(aut);
+ var mm=r2(mat*n(st.pm)/100),base=r2(mat+mm+mo+aut),ct=r2(base*n(st.ct)/100),s1=r2(base+ct),
+  fg=r2(s1*n(st.fg)/100),s2=r2(s1+fg),pf=r2(s2*n(st.pf)/100),prix=r2(s2+pf),
+  tps=st.tax?r2(prix*0.05):0,tvq=st.tax?r2(prix*0.09975):0,tot=r2(prix+tps+tvq);
+ last={prix:prix,tot:tot,hrs:hrs,mat:mat,mo:mo,aut:aut,pf:pf};
+ var rows=[['Matériel (coûtant)',mat],['Majoration du matériel',mm],['Main-d\'œuvre',mo],['Autres frais',aut],['Contingence',ct],['Frais généraux',fg],['Profit',pf]].filter(function(r){return r[1]!==0});
+ var h=rows.map(function(r){return '<div><span>'+r[0]+'</span><span>'+m$(r[1])+'</span></div>'}).join('');
+ h+='<div class="t"><span>Prix avant taxes</span><span>'+m$(prix)+'</span></div>';
+ if(st.tax)h+='<div><span>TPS (5 %)</span><span>'+m$(tps)+'</span></div><div><span>TVQ (9,975 %)</span><span>'+m$(tvq)+'</span></div><div class="t"><span>Total taxes incluses</span><span>'+m$(tot)+'</span></div>';
+ if(pf>0&&prix>0)h+='<p class="hint">Le profit représente '+(pf/prix*100).toLocaleString('fr-CA',{maximumFractionDigits:1})+' % du prix de vente.</p>';
+ $('e-out').innerHTML=h;
+ $('e-prix').textContent=m$(prix);
+ $('e-tot').textContent=(st.tax?'Total taxes incluses : ':'Taxes non calculées')+(st.tax?m$(tot):'');
+ $('e-pf').textContent=m$(pf);$('e-hrs').textContent=hmm(hrs);
+}
+var root=$('t-est');
+root.addEventListener('input',function(ev){
+ var t=ev.target;
+ if(t.dataset.g){st[t.dataset.g]=t.type==='checkbox'?t.checked:t.value}
+ else if(t.dataset.l){st[t.dataset.l][+t.dataset.i][t.dataset.k]=t.value}
+ else return;
+ save();calc();
+});
+root.addEventListener('change',function(ev){
+ var t=ev.target;
+ if(t.dataset.l==='mat'&&(t.dataset.k==='c'||t.dataset.k==='d')){
+  var l=st.mat[+t.dataset.i],k=(l.d||'').trim();
+  if(k&&n(l.c)>0){cat[k]=l.c;saveCat();chips()}
+ }
+});
+root.addEventListener('click',function(ev){
+ var t=ev.target;
+ if(t.dataset.del!==undefined){
+  var nm=t.dataset.l;st[nm].splice(+t.dataset.del,1);
+  if(!st[nm].length)st[nm]=fresh()[nm];
+  save();list(nm);calc();return;
+ }
+ if(t.dataset.chip!==undefined){
+  var name=$('e-chips').chipNames[+t.dataset.chip],ln={d:name,q:1,c:cat[name]||''};
+  if(st.mat.length===1&&!st.mat[0].d&&!st.mat[0].c)st.mat[0]=ln;else st.mat.push(ln);
+  save();list('mat');calc();
+ }
+});
+document.addEventListener('addMat',function(ev){
+ var x=ev.detail,ln={d:x.d,q:1,c:x.c},k=(x.d||'').trim();
+ if(st.mat.length===1&&!st.mat[0].d&&!st.mat[0].c)st.mat[0]=ln;else st.mat.push(ln);
+ if(k&&n(x.c)>0){cat[k]=x.c;saveCat()}
+ save();list('mat');chips();calc();
+});
+function add(nm,o){return function(){st[nm].push(o());save();list(nm);calc()}}
+$('e-addlm').onclick=add('lm',function(){return{d:'',h:''}});
+$('e-addmat').onclick=add('mat',function(){return{d:'',q:1,c:''}});
+$('e-addaut').onclick=add('aut',function(){return{d:'',m:''}});
+$('e-inv').onclick=function(){
+ if(!last.prix){$('e-msg').textContent='Rien à envoyer : le prix est à 0 $.';return}
+ document.dispatchEvent(new CustomEvent('addLine',{detail:{d:'Travaux : '+(st.nom||'selon estimation'),t:'Forfait',q:1,p:last.prix}}));
+ $('e-msg').textContent='';
+ document.dispatchEvent(new CustomEvent('showtab',{detail:'factures'}));
+};
+$('e-copy').onclick=function(){
+ var L=['Estimation : '+(st.nom||''),'Matériel (coûtant)\t'+m$(last.mat),'Main-d\'œuvre\t'+m$(last.mo),'Autres frais\t'+m$(last.aut),'Profit\t'+m$(last.pf),'Prix avant taxes\t'+m$(last.prix)];
+ if(st.tax)L.push('Total taxes incluses\t'+m$(last.tot));
+ var m=$('e-msg');
+ function ok(){m.textContent='Résumé copié.'}
+ function ko(){m.textContent='Copie impossible ici. Fais une capture d\'écran du détail.'}
+ try{navigator.clipboard.writeText(L.join('\n')).then(ok,ko)}catch(e){ko()}
+};
+var armed=false,nb=$('e-new');
+nb.onclick=function(){
+ if(!armed){armed=true;nb.textContent='Confirmer : tout vider';setTimeout(function(){armed=false;nb.textContent='Nouvelle estimation'},4000);return}
+ var f=fresh();st.nom=f.nom;st.lm=f.lm;st.mat=f.mat;st.aut=f.aut;armed=false;nb.textContent='Nouvelle estimation';
+ save();fill();calc();$('e-msg').textContent='Estimation vidée. Tes taux et pourcentages sont conservés.';
+};
+fill();calc();
+})();
+
+/* ========== PRIX ========== */
+(function(){
+var KEY='prix-v1';
+var BIG=[['Home Depot','homedepot.ca','https://www.homedepot.ca'],['RONA','rona.ca','https://www.rona.ca'],['Réno-Dépôt','renodepot.com','https://www.renodepot.com'],['Canac','canac.ca','https://www.canac.ca'],['BMR','bmr.co','https://www.bmr.co'],['Patrick Morin','patrickmorin.com','https://www.patrickmorin.com'],['Canadian Tire','canadiantire.ca','https://www.canadiantire.ca']];
+var ELEC=[['Lumen','lumen.ca','https://www.lumen.ca'],['Guillevin','guillevin.com','https://www.guillevin.com'],['Westburne','westburne.ca','https://www.westburne.ca'],['Nedco','nedco.ca','https://www.nedco.ca']];
+function item(){return{nom:'',unite:'',o:[{mag:'',prix:'',qte:''},{mag:'',prix:'',qte:''}]}}
+var st={items:[item()]};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.items&&o.items.length)st=o}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function mu(x){return x.toLocaleString('fr-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:4})}
+function unit(o){var p=parseFloat(o.prix),q=parseFloat(o.qte);return p>0&&q>0?p/q:null}
+$('p-dl').innerHTML=BIG.concat(ELEC).map(function(s){return '<option value="'+esc(s[0])+'">'}).join('');
+function links(){
+ var q=$('p-q').value.trim();
+ function row(s){
+  var g='https://www.google.com/search?q='+encodeURIComponent((q?q+' ':'')+'site:'+s[1]);
+  return '<div class="st"><a href="'+s[2]+'" target="_blank" rel="noopener noreferrer">'+esc(s[0])+'</a>'+(q?'<a href="'+g+'" target="_blank" rel="noopener noreferrer">Chercher « '+esc(q)+' »</a>':'')+'</div>';
+ }
+ $('p-stores').innerHTML='<h3>Quincailleries et grandes surfaces</h3>'+BIG.map(row).join('')+'<h3>Distributeurs électriques</h3>'+ELEC.map(row).join('');
+}
+function best(it){
+ var us=it.o.map(unit),vals=us.filter(function(u){return u!==null});
+ if(!vals.length)return null;
+ var min=Math.min.apply(null,vals),k=us.indexOf(min);
+ return{v:min,mag:it.o[k].mag,us:us,count:vals.length};
+}
+function calc(){
+ st.items.forEach(function(it,i){
+  var b=best(it),u=(it.unite||'').trim()||'unité',el=$('pb'+i);
+  it.o.forEach(function(o,j){
+   var s=$('pu'+i+'-'+j);if(!s)return;
+   var x=b?b.us[j]:null;
+   s.textContent=x===null||x===undefined?'':mu(x)+' / '+u+((b.count>1&&x===b.v)?' ✔ le moins cher':'');
+  });
+  if(el)el.textContent=b?'Meilleur prix : '+mu(b.v)+' / '+u+(b.mag?' chez '+b.mag:''):'';
+ });
+}
+function render(){
+ $('p-items').innerHTML=st.items.map(function(it,i){
+  var offers=it.o.map(function(o,j){
+   var a=' data-i="'+i+'" data-j="'+j+'"';
+   return '<div class="ln"><input list="p-dl" aria-label="Magasin" placeholder="Magasin" value="'+esc(o.mag)+'"'+a+' data-k="mag">'+
+    '<div class="r" style="grid-template-columns:1fr 1fr"><input aria-label="Prix affiché" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Prix affiché $" value="'+esc(o.prix)+'"'+a+' data-k="prix">'+
+    '<input aria-label="Quantité dans l\'emballage" type="number" inputmode="decimal" min="0" step="any" placeholder="Qté dans l\'emballage" value="'+esc(o.qte)+'"'+a+' data-k="qte"></div>'+
+    '<div class="b"><span id="pu'+i+'-'+j+'"></span><button type="button" data-delo="'+i+'-'+j+'" style="min-height:38px">Retirer</button></div></div>';
+  }).join('');
+  return '<div class="card"><label for="pn'+i+'" style="margin-top:0">Article</label><input id="pn'+i+'" data-i="'+i+'" data-k="nom" placeholder="ex. Fil NMD90 14/2" value="'+esc(it.nom)+'">'+
+   '<label for="pun'+i+'">Unité de mesure</label><input id="pun'+i+'" data-i="'+i+'" data-k="unite" placeholder="m, pi, unité, boîte…" value="'+esc(it.unite)+'">'+
+   '<div style="margin-top:10px">'+offers+'</div><div class="best" id="pb'+i+'"></div>'+
+   '<button class="w" type="button" data-addo="'+i+'" style="margin-top:8px">+ Ajouter une offre</button>'+
+   '<div class="btns"><button class="p" type="button" data-use="'+i+'">Utiliser dans l\'estimation</button><button type="button" data-deli="'+i+'">Supprimer</button></div></div>';
+ }).join('');
+ calc();sel();
+}
+var root=$('t-prix');
+root.addEventListener('input',function(ev){
+ var t=ev.target;
+ if(t.id==='p-q'){links();return}
+ if(t.dataset.k===undefined)return;
+ var it=st.items[+t.dataset.i];
+ if(t.dataset.j!==undefined)it.o[+t.dataset.j][t.dataset.k]=t.value;else it[t.dataset.k]=t.value;
+ save();calc();if(t.dataset.k==='nom')sel();
+});
+root.addEventListener('click',function(ev){
+ var t=ev.target,d=t.dataset;if(!d)return;
+ if(d.addo!==undefined){st.items[+d.addo].o.push({mag:'',prix:'',qte:''});save();render();return}
+ if(d.delo!==undefined){var a=d.delo.split('-'),it=st.items[+a[0]];it.o.splice(+a[1],1);if(!it.o.length)it.o.push({mag:'',prix:'',qte:''});save();render();return}
+ if(d.deli!==undefined){st.items.splice(+d.deli,1);if(!st.items.length)st.items.push(item());save();render();return}
+ if(d.use!==undefined){
+  var it2=st.items[+d.use],b=best(it2),m=$('p-msg');
+  if(!b){m.textContent='Entre au moins un prix et une quantité pour cet article.';return}
+  document.dispatchEvent(new CustomEvent('addMat',{detail:{d:(it2.nom||'').trim()||'Article',c:parseFloat(b.v.toFixed(4))}}));
+  m.textContent='Ajouté à l\'estimation : '+mu(b.v)+' / '+((it2.unite||'').trim()||'unité')+'.';
+ }
+});
+$('p-add').onclick=function(){st.items.push(item());save();render()};
+function sel(){
+ var s=$('p-impi'),v=s.value||'0';
+ s.innerHTML=st.items.map(function(it,i){return '<option value="'+i+'">'+esc((it.nom||'').trim()||'Article '+(i+1))+'</option>'}).join('');
+ s.value=(+v<st.items.length)?v:'0';
+}
+function bm(){
+ var d=document,nm=null,pr=null;
+ function num(x){if(x==null)return null;var v=parseFloat(String(x).replace(/[^0-9.,]/g,'').replace(',','.'));return isFinite(v)&&v>0?v:null}
+ function walk(o){
+  if(!o||typeof o!=='object')return;
+  if(Array.isArray(o)){o.forEach(walk);return}
+  if(o['@graph'])walk(o['@graph']);
+  var t=o['@type'];
+  if(t==='Product'||(Array.isArray(t)&&t.indexOf('Product')>-1)){
+   nm=nm||o.name;
+   var f=o.offers;
+   (Array.isArray(f)?f:[f]).forEach(function(x){if(!x||pr)return;pr=num(x.price)||num(x.lowPrice)||(x.priceSpecification&&num(x.priceSpecification.price))});
+  }
+ }
+ d.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){try{walk(JSON.parse(s.textContent))}catch(e){}});
+ function mt(q){var e=d.querySelector(q);return e?e.getAttribute('content'):null}
+ pr=pr||num(mt('meta[property="product:price:amount"]'))||num(mt('meta[itemprop="price"]'))||num(mt('meta[property="og:price:amount"]'));
+ var h1=d.querySelector('h1');
+ nm=nm||mt('meta[property="og:title"]')||(h1&&h1.textContent)||d.title;
+ if(!pr){alert('Prix introuvable sur cette page. Entre-le à la main dans l\'onglet Prix.');return}
+ var s='PRIX|'+location.hostname.replace(/^www\./,'')+'|'+String(nm).replace(/[|\n\r]+/g,' ').trim().slice(0,100)+'|'+pr;
+ function fb(){prompt('Copie ce texte, puis colle-le dans l\'onglet Prix :',s)}
+ try{navigator.clipboard.writeText(s).then(function(){alert('Prix copié : '+pr+' $. Colle-le dans l\'onglet Prix.')},fb)}catch(e){fb()}
+}
+var BMCODE='javascript:'+encodeURIComponent('('+bm.toString()+')();');
+$('p-bm').setAttribute('href',BMCODE);
+$('p-bm').onclick=function(ev){ev.preventDefault();$('p-msg').textContent='Glisse ce bouton dans ta barre de favoris, ne le touche pas ici.'};
+$('p-bmc').onclick=function(){
+ var m=$('p-msg');
+ function ok(){m.textContent='Code copié. Colle-le comme adresse (URL) d\'un favori.'}
+ function ko(){prompt('Copie ce code :',BMCODE)}
+ try{navigator.clipboard.writeText(BMCODE).then(ok,ko)}catch(e){ko()}
+};
+function doImport(txt){
+ var m=$('p-msg'),a=String(txt||'').trim().split('|');
+ if(a[0]!=='PRIX'||a.length<4){m.textContent='Texte non reconnu : il doit commencer par PRIX| (copié par le favori).';return}
+ var host=a[1],name=a.slice(2,-1).join(' ').trim(),price=parseFloat(a[a.length-1]);
+ if(!(price>0)){m.textContent='Prix invalide dans le texte importé.';return}
+ var mag=host;
+ BIG.concat(ELEC).forEach(function(s){if(host===s[1]||host.slice(-(s[1].length+1))==='.'+s[1])mag=s[0]});
+ var idx=+$('p-impi').value||0,it=st.items[idx],o=null;
+ for(var j=0;j<it.o.length;j++){if(!it.o[j].mag&&!it.o[j].prix){o=it.o[j];break}}
+ if(!o){o={mag:'',prix:'',qte:''};it.o.push(o)}
+ o.mag=mag;o.prix=String(price);
+ if(!(it.nom||'').trim())it.nom=name.slice(0,80);
+ save();render();$('p-impi').value=String(idx);
+ m.textContent='Offre ajoutée ('+mag+', '+price.toLocaleString('fr-CA',{minimumFractionDigits:2})+' $). Entre la quantité dans l\'emballage.';
+}
+$('p-impb').onclick=function(){
+ var t=$('p-imp').value.trim(),m=$('p-msg');
+ if(t){doImport(t);$('p-imp').value='';return}
+ function none(){m.textContent='Colle le texte copié dans la case, puis touche Importer.'}
+ try{navigator.clipboard.readText().then(function(x){doImport(x||'')},none)}catch(e){none()}
+};
+var REL='prix-relais-v1',TOK='prix-jeton-v1',hdRes=[];
+function lsGet(k){try{return localStorage.getItem(k)||''}catch(e){return''}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+$('p-rel').value=lsGet(REL);$('p-tok').value=lsGet(TOK);
+$('p-rel').addEventListener('input',function(){lsSet(REL,this.value.trim())});
+$('p-tok').addEventListener('input',function(){lsSet(TOK,this.value)});
+function safeLink(u){return /^https:\/\/([a-z0-9-]+\.)?homedepot\.(ca|com)\//i.test(u||'')?u:'#'}
+function showHd(){
+ $('p-hdr').innerHTML=hdRes.map(function(p,i){
+  var pr=parseFloat(p.prix);
+  return '<div class="st" style="align-items:flex-start"><div><a href="'+esc(safeLink(p.lien))+'" target="_blank" rel="noopener noreferrer">'+esc(p.titre||'Produit')+'</a><div class="hint" style="margin:2px 0 0">'+esc(p.marque||'')+'</div></div>'+
+   '<div style="text-align:right;white-space:nowrap"><b>'+(pr>0?mu(pr):'—')+'</b><br>'+(pr>0?'<button type="button" data-hdi="'+i+'" style="min-height:34px;font-size:14px;margin-top:4px">Ajouter</button>':'')+'</div></div>';
+ }).join('');
+}
+$('p-hd').onclick=function(){
+ var q=$('p-q').value.trim(),m=$('p-msg'),url=$('p-rel').value.trim();
+ if(!q){m.textContent='Tape d\'abord un article dans la case « Article » en haut de l\'onglet.';return}
+ if(!/^https:\/\//.test(url)){m.textContent='Entre l\'adresse de ton relais dans les réglages (voir relais-homedepot.js).';$('p-rel').closest('details').open=true;return}
+ m.textContent='Recherche chez Home Depot…';
+ fetch(url.replace(/\/+$/,'')+'/?q='+encodeURIComponent(q),{headers:{'x-app-token':$('p-tok').value}})
+  .then(function(r){return r.json()})
+  .then(function(d){
+   if(d.erreur){m.textContent='Erreur du relais : '+d.erreur;return}
+   hdRes=d.produits||[];showHd();
+   m.textContent=hdRes.length?hdRes.length+' résultat(s). Ajoute celui qui t\'intéresse, puis entre la quantité dans l\'emballage.':'Aucun résultat chez Home Depot.';
+  })
+  .catch(function(){m.textContent='Impossible de joindre le relais. Vérifie son adresse et ta connexion.'});
+};
+$('p-hdr').addEventListener('click',function(ev){
+ var b=ev.target.closest('button');if(!b)return;
+ var p=hdRes[+b.dataset.hdi];if(!p||!(parseFloat(p.prix)>0))return;
+ doImport('PRIX|homedepot.ca|'+String(p.titre||'').replace(/\|/g,' ')+'|'+parseFloat(p.prix));
+});
+links();render();
+})();
+
+/* ========== ONGLETS ========== */
+(function(){
+var T=['heures','est','prix','factures','frac'],KEY='tab-v1';
+function show(n){
+ if(T.indexOf(n)<0)n='heures';
+ T.forEach(function(t){var on=t===n;$('t-'+t).hidden=!on;var b=$('b-'+t);b.setAttribute('aria-selected',on?'true':'false');b.className=on?'on':''});
+ try{localStorage.setItem(KEY,n)}catch(e){}
+ window.scrollTo(0,0);
+}
+T.forEach(function(t){$('b-'+t).onclick=function(){show(t)}});
+document.addEventListener('showtab',function(ev){show(ev.detail)});
+var s='heures';try{s=localStorage.getItem(KEY)||'heures'}catch(e){}
+show(s);
 })();
 </script>
 </body>
